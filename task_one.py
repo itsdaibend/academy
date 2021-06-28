@@ -1,7 +1,10 @@
+WELCOME_MSG = '\n*** Welcome to the Chessboard Generator ***'\
+              '\nFor correct using of program, enter only two integers divided by comma.'
+VALUE_ERROR_MSG = 'Please, try again and enter only integer number.'
+
+
 class Chessboard:
     """
-    *** Welcome to the Chessboard Generator ***
-    For correct using of program, enter only two integers divided by comma.
     The main task of this class is printing Chessboard by two parameters:
     WIDTH - int, basically equal 0,
     HEIGHT - int, basically equal 0.
@@ -33,11 +36,12 @@ class Chessboard:
 if __name__ == "__main__":
     actually = True
     while actually:
+        print(WELCOME_MSG)
         try:
             chess_width = int(input('Enter the value for width: '))
             chess_height = int(input('Enter the value for height: '))
         except ValueError:
-            print(f'\nPlease, try again and enter only integer number.')
+            print(VALUE_ERROR_MSG)
             continue
 
         chess = Chessboard(chess_width, chess_height)

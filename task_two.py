@@ -1,3 +1,10 @@
+WELCOME_MSG = '*** Welcome to the Envelopes Comparator ***' \
+              '\nFor correct using of program, enter integers in each input.'
+RESULT_FIRST_MSG = 'Second envelope is accommodate in first.'
+RESULT_SECOND_MSG = 'First envelope is accommodate in second.'
+RESULT_NONE_MSG = "Second envelope isn't accommodate in first and vice versa."
+
+
 class Envelope:
     """
     *** Welcome to the Envelops Generator ***
@@ -21,9 +28,20 @@ class Envelope:
                )
 
 
+def env_compare():
+    if env1 > env2:
+        result = RESULT_FIRST_MSG
+    elif env1 < env2:
+        result = RESULT_SECOND_MSG
+    else:
+        result = RESULT_NONE_MSG
+    return result
+
+
 if __name__ == '__main__':
     actually = True
     while actually:
+        print(WELCOME_MSG)
         try:
             first_width = float(input('Enter the value for width of first envelope: '))
             first_height = float(input('Now, enter the value for height of first envelope: '))
@@ -36,17 +54,8 @@ if __name__ == '__main__':
         env1 = Envelope(first_width, first_height)
         env2 = Envelope(second_width, second_height)
 
-        def env_compare():
-            if env1 > env2:
-                result = 'env 2 is accommodate in env 1'
-            elif env1 < env2:
-                result = 'env 1 is accommodate in env 2'
-            else:
-                result = "env 2 isn't accommodate in env 1 and vice versa."
-            return result
-
         print(env_compare())
 
-        iteration = input('One more time?[y/n]: ')
+        iteration = input('\nStart the program one more time?[y/n]: ')
         if str(iteration.lower()) != 'y':
             actually = False
