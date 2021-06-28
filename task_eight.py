@@ -1,3 +1,8 @@
+WELCOME_MSG = '\n***Welcome to the Fibonacci Row Generator***' \
+              '\nEnter only two positive integers for generating borders of the row divided by comma: '
+ERROR_MSG = '\nPlease, try again and enter only integer numbers divided by comma.'
+
+
 class Fibonacci:
     """
     The main goal of this class - is generating Fibonacci's numbers for the special range.
@@ -25,18 +30,10 @@ if __name__ == '__main__':
     actually = True
     while actually:
         try:
-            fib_numbers = input("enter two numbers divided by comma: ").split(',')
-        except ValueError:
-            print(f'\nPlease, try again and enter only integer numbers divided by comma.')
-            continue
-
-        try:
+            fib_numbers = input(WELCOME_MSG).split(',')
             f = Fibonacci(int(fib_numbers[0]), int(fib_numbers[1]))
-        except IndexError:
-            print(f'\nPlease, try again and enter only integer numbers divided by comma.')
-            continue
-        except ValueError:
-            print(f'\nPlease, try again and enter only integer numbers divided by comma.')
+        except (IndexError, ValueError):
+            print(ERROR_MSG)
             continue
 
         iteration = input('\nOne more time?[y/n]: ')
