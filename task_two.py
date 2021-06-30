@@ -39,8 +39,7 @@ def env_compare():
 
 
 if __name__ == '__main__':
-    actually = True
-    while actually:
+    while True:
         print(WELCOME_MSG)
         try:
             first_width = float(input('Enter the value for width of first envelope: '))
@@ -56,6 +55,6 @@ if __name__ == '__main__':
 
         print(env_compare())
 
-        iteration = input('\nStart the program one more time?[y/n]: ')
-        if str(iteration.lower()) != 'y':
-            actually = False
+        iteration = input('Start the program one more time?[y/n]: ')
+        if iteration.lower() not in ['y', 'yes']:
+            break

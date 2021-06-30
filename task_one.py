@@ -34,8 +34,7 @@ class Chessboard:
 
 
 if __name__ == "__main__":
-    actually = True
-    while actually:
+    while True:
         print(WELCOME_MSG)
         try:
             chess_width = int(input('Enter the value for width: '))
@@ -47,5 +46,5 @@ if __name__ == "__main__":
         chess = Chessboard(chess_width, chess_height)
 
         iteration = input('One more time?[y/n]: ')
-        if str(iteration.lower()) != 'y':
-            actually = False
+        if iteration.lower() not in ['y', 'yes']:
+            break

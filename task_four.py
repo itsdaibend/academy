@@ -24,15 +24,13 @@ class FileParser:
     # this method initializes the second mode.
     def change_content(self):
         try:
-            with open(path, 'r') as file:
+            with open(path, 'r+') as file:
                 old_data = file.read()
                 new_data = old_data.replace(self.string_to_change, self.new_string)
-            with open(path, 'r+') as file:
                 file.write(new_data)
-                file.close()
+                print(f"String {self.string_to_change} has changed on {self.new_string}.")
         except FileNotFoundError:
-            return print(ERROR_MSG)
-        print(f"String {self.string_to_change} has changed on {self.new_string}.")
+            print(ERROR_MSG)
 
     # this method initializes the first mode.
     def find_content(self):
@@ -43,14 +41,12 @@ class FileParser:
                     comparation = re.findall(string_to_find, line)
                     result += len(comparation)
                 print(f'Text {self.string_to_change} appears {result} times in the file.')
-                file.close()
         except FileNotFoundError:
             return print(ERROR_MSG)
 
 
 if __name__ == '__main__':
-    actually = True
-    while actually:
+    while True:
         mode = input(WELCOME_MSG)
 
         if mode == '':
@@ -74,6 +70,6 @@ if __name__ == '__main__':
         else:
             continue
 
-        iteration = input('\nStart the program one more time?[y/n]: ')
-        if str(iteration.lower()) != 'y':
-            actually = False
+        iteration = input('Start the program one more time?[y/n]: ')
+        if iteration.lower() not in ['y', 'yes']:
+            break

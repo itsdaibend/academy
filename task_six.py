@@ -14,7 +14,7 @@ DATA_MSG = 'Enter the name of file, amount of tickets, min.,max. values divided 
 ERROR_MSG = "The file you were looking for was not found. Please,try again."
 
 
-class TicketsGenerator:
+class LuckyTicketsGenerator:
     """
     This class creates a .txt file with certain amount of tickets in a digit format.
     """
@@ -28,74 +28,68 @@ class TicketsGenerator:
         with open(self.file_name, 'w') as file:
             for i in range(int(self.tickets_amount)):
                 file.write(f'{randint(self.min_ticket_value,self.max_ticket_value):06} ')
-            file.close()
 
 
-class TicketsCounter:
+class LuckyTicketsCounter:
     """
     This class checks all the tickets in file and returns amount of special combinations.
     """
     @staticmethod
-    def moscow_method(file):
+    def moscow_count_method(file):
         count = 0
         try:
             with open(file, 'r') as f:
                 for line in f:
                     all_numbers = re.findall(r'[0-9]{6}', line)
                     for number in all_numbers:
-                        if (
-                                int(number[0]) + int(number[1]) + int(number[2]) ==
-                                int(number[3]) + int(number[4]) + int(number[5])
-                           ):
+                        if int(number[0]) + int(number[1]) + int(number[2]) == \
+                           int(number[3]) + int(number[4]) + int(number[5]):
                             count += 1
-            f.close()
+            print(count)
         except FileNotFoundError:
-            return print(ERROR_MSG)
-        return print(count)
+            print(ERROR_MSG)
+
 
     @staticmethod
-    def saint_petersburg_method(file):
+    def saint_petersburg_count_method(file):
         count = 0
         try:
             with open(file, 'r') as f:
                 for line in f:
                     all_numbers = re.findall(r'[0-9]{6}', line)
                     for number in all_numbers:
-                        if (
-                                int(number[0]) + int(number[2]) + int(number[4]) ==
-                                int(number[1]) + int(number[3]) + int(number[5])
-                           ):
+                        if int(number[0]) + int(number[2]) + int(number[4]) == \
+                           int(number[1]) + int(number[3]) + int(number[5]):
                             count += 1
-            f.close()
+            print(count)
         except FileNotFoundError:
-            return print(ERROR_MSG)
-        return print(count)
+            print(ERROR_MSG)
+
 
 
 if __name__ == '__main__':
-    actually = True
-    while actually:
+    while True:
         mode = input(WELCOME_MSG)
         if mode == '':
             print(INFORMATION_MSG)
         elif mode == '1':
             try:
                 incoming_data = input(DATA_MSG).split(',')
-                t = TicketsGenerator(
+                t = LuckyTicketsGenerator(
                     f'{incoming_data[0]}.txt', int(incoming_data[1]), int(incoming_data[2]), int(incoming_data[3])
                                     )
                 t.get_file()
             except (IndexError, ValueError):
                 continue
         elif mode == '2':
-            t = TicketsCounter
+            t = LuckyTicketsCounter
             sorting_method = input(SORTING_MSG)
             incoming_data = input('Enter the name of file or path to file: ')
             if sorting_method == '1':
-                t.moscow_method(incoming_data)
+                t.moscow_count_method(incoming_data)
             elif sorting_method == '2':
-                t.saint_petersburg_method(incoming_data)
+                t.saint_petersburg_count_method(incoming_data)
 
-        iteration = input('\nStart the program one more time?[y/n]: ')
-        if str(iteration.lower()) != 'y':
-            actually = False
+        iteration = input('Start the program one more time?[y/n]: ')
+        if iteration.lower() not in ['y', 'yes']:
+            break

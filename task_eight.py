@@ -3,7 +3,7 @@ WELCOME_MSG = '\n***Welcome to the Fibonacci Row Generator***' \
 ERROR_MSG = '\nPlease, try again and enter only integer numbers divided by comma.'
 
 
-class Fibonacci:
+class FibonacciRange:
     """
     The main goal of this class - is generating Fibonacci's numbers for the special range.
     If you need instructions - pass empty parameters.
@@ -13,29 +13,27 @@ class Fibonacci:
         self.open_number = open_number
         self.close_number = close_number
 
-        self.main()
+    def __repr__(self):
+        return ', '.join(str(x) for x in self.numbers() if self.open_number < x < self.close_number)
 
-    def main(self):
+    def numbers(self):
         result = []
         numb_one, numb_two = 0, 1
         while numb_two < self.close_number:
+            yield numb_one
             numb_one, numb_two = numb_two, numb_one + numb_two
-            result.append(numb_one)
-        while result[0] < self.open_number:
-            result.pop(0)
-        return print(result)
 
 
 if __name__ == '__main__':
-    actually = True
-    while actually:
+    while True:
         try:
             fib_numbers = input(WELCOME_MSG).split(',')
-            f = Fibonacci(int(fib_numbers[0]), int(fib_numbers[1]))
+            f = FibonacciRange(int(fib_numbers[0]), int(fib_numbers[1]))
+            print(f)
         except (IndexError, ValueError):
             print(ERROR_MSG)
             continue
 
-        iteration = input('\nOne more time?[y/n]: ')
-        if str(iteration.lower()) != 'y':
-            actually = False
+        iteration = input('Start the program one more time?[y/n]: ')
+        if iteration.lower() not in ['y', 'yes']:
+            break

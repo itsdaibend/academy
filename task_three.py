@@ -12,46 +12,43 @@ class Triangle:
     The main task of this class is creating different triangles by their areas.
     """
 
-    def __init__(self, name, side_a, side_b, side_c):
-        self.name = name
+    def __init__(self, triangle_name, side_a, side_b, side_c):
+        self.triangle_name = triangle_name
         self.side_a = int(side_a)
         self.side_b = int(side_b)
         self.side_c = int(side_c)
 
-        self.main()
+        self.get_values()
 
-    def main(self):
+    def get_values(self):
         semi_per = (self.side_a + self.side_b + self.side_c) / 2
         area = sqrt(semi_per * (semi_per - self.side_a) * (semi_per - self.side_b) * (semi_per - self.side_c))
         print(
-            f'New triangle created as {self.name}, lengths - {self.side_a},'
+            f'New triangle created as {self.triangle_name}, lengths - {self.side_a},'
             f'{self.side_b},{self.side_c} cm.'
             f'\nPerimeter(P) = {semi_per*2} cm,\nArea(S) = {round(area, 2)} cm.'
              )
 
-        triangles.append((self.name, area))
+        triangles.append((self.triangle_name, area))
 
 
 if __name__ == "__main__":
     triangles = []
-    actually = True
 
-    while actually:
+    while True:
         print(WELCOME_MSG)
         try:
-            new = input(NEW_TRIANGLE_MSG).split(',')
-            if len(new) < 4:
-                print(ERROR_MSG)
-                continue
-            int_new_triangle = list(map(lambda i: int(i), new[1:]))
-            int_new_triangle.insert(0, new[0])
+            name, side_first, side_second, side_third = input(NEW_TRIANGLE_MSG).split(',')
+            int_new_triangle = list(map(lambda i: int(i), (side_first, side_second, side_third)))
+            int_new_triangle.insert(0, name)
         except ValueError:
+            print(ERROR_MSG)
             continue
 
-        triangle = Triangle(new[0], new[1], new[2], new[3])
+        triangle_to_compare = Triangle(name, side_first, side_second, side_third)
 
         question = input(ONE_MORE_MSG)
-        if question.lower() == 'yes' or question.lower() == 'y':
+        if question.lower() in ['y', 'yes']:
             print("Let's add one more...\n")
             continue
         else:
@@ -59,9 +56,5 @@ if __name__ == "__main__":
 
     triangles.sort(key=lambda y: y[1], reverse=True)
     print('\n====== Triangles list: ======')
-    for x in triangles:
-        print(f'[Triangle {x[0]}]: {round(x[1],2)} cm.')
-
-    iteration = input('\nStart the program one more time?[y/n]: ')
-    if str(iteration.lower()) != 'y':
-        actually = False
+    for triangle in triangles:
+        print(f'[Triangle {triangle[0]}]: {round(triangle[1],2)} cm.')
