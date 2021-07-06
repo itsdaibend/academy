@@ -67,29 +67,25 @@ class NumbersRepresentation:
     def __init__(self, number: int):
         self.number = number
 
-    # this method shows the final result.
-    def __str__(self):
-        return ' '.join(self.number_representation(self.list_packing())).capitalize()
-
     # this method converts a number into a three-digits list.
     # >>> ['123','456','789']
     def list_packing(self):
         return f'{self.number:,}'.split(',')
 
-    def rank_counting(self, list):
-        # method counts ranks and adds it for the special list.
-        self.suitable_ranks = RANKS[:len(list)-1]
+    # method counts ranks and adds it for the special list.
+    def get_rank_counts(self, enter_list):
+        self.suitable_ranks = RANKS[:len(enter_list)-1]
         return self.suitable_ranks
 
     # method for converting a list of numbers to a list of words.
-    def number_representation(self, list):
+    def sub_number_representation(self, list):
         self.string_result = []
         global iteration
 
         try:
             if len(str(self.number)) in [3, 6, 9, 12, 15, 18, 21, 24]:
                 iteration = 0
-            elif len(str(self.number)) in [1, 4, 7, 10, 13, 16, 19,22]:
+            elif len(str(self.number)) in [1, 4, 7, 10, 13, 16, 19, 22]:
                 iteration = 2
             elif len(str(self.number)) in [2, 5, 8, 11, 14, 17, 20, 23]:
                 iteration = 1
@@ -111,7 +107,7 @@ class NumbersRepresentation:
                             iteration += 1
                             continue
                         elif digit in ['1', '2']:
-                            self.string_result.append(UNITS.get(digit)[1])
+                            self.string_result.append(UNITS.get(digit)[0])
                             iteration += 1
                             continue
                         else:
@@ -189,7 +185,7 @@ class NumbersRepresentation:
                         if digit == '0':
                             iteration += 1
                             continue
-                        elif digit in ['1', '2'] and group == list[-2]:
+                        elif len(list) >= 2 and digit in ['1', '2'] and group == list[-2]:
                             self.string_result.append(UNITS.get(digit)[1])
                             iteration += 1
                             continue
@@ -218,6 +214,13 @@ class NumbersRepresentation:
         return self.string_result
 
 
+def main():
+    ordered_list = numb.list_packing()
+    numb.get_rank_counts(ordered_list)
+
+    print(' '.join(numb.sub_number_representation(ordered_list)).capitalize())
+
+
 if __name__ == '__main__':
     while True:
         incoming_data = input(WELCOME_MSG)
@@ -227,8 +230,7 @@ if __name__ == '__main__':
             print(VALUE_ERROR_MSG)
             continue
 
-        numb.rank_counting(numb.list_packing())
-        print(numb)
+        main()
 
         iteration = input('Start the program one more time?[y/n]: ')
         if iteration.lower() not in ['y', 'yes']:
