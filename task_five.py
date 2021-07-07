@@ -66,143 +66,170 @@ class NumbersRepresentation:
     """
     def __init__(self, number: int):
         self.number = number
+        self.iteration = 0
 
-    # this method converts a number into a three-digits list.
+    # this method converts a number into a three-digits data_list.
     # >>> ['123','456','789']
     def list_packing(self):
         return f'{self.number:,}'.split(',')
 
-    # method counts ranks and adds it for the special list.
+    # method counts ranks and adds it for the special data_list.
     def get_rank_counts(self, enter_list):
         self.suitable_ranks = RANKS[:len(enter_list)-1]
         return self.suitable_ranks
 
-    # method for converting a list of numbers to a list of words.
-    def sub_number_representation(self, list):
+    def first_translation_method(self, counter, group, data_list):
+        for digit in group:
+            if digit == '0':
+                counter += 1
+                continue
+            elif counter in [2, 5, 8, 11, 14, 17, 20]:
+                if digit in ['1', '2'] and group == data_list[-2]:
+                    self.string_result.append(UNITS.get(digit)[1])
+                    counter += 1
+                    continue
+                elif digit in ['1', '2']:
+                    self.string_result.append(UNITS.get(digit)[0])
+                    counter += 1
+                    continue
+                else:
+                    self.string_result.append(UNITS.get(digit))
+            counter += 1
+        return counter, self.string_result
+
+    def second_translation_method(self, counter, group):
+        for digit in group:
+            if digit == '0':
+                counter += 1
+                continue
+            if counter in [1, 4, 7, 10, 13, 16, 19]:
+                self.string_result.append(DOZENS.get(digit + group[-1]))
+            counter += 1
+        return counter, self.string_result
+
+    def third_translation_method(self, counter, group, data_list):
+        for digit in group:
+            if digit == '0':
+                counter += 1
+                continue
+            if counter in [1, 4, 7, 10, 13, 16, 19]:
+                self.string_result.append(DOZENS.get(digit))
+            elif counter in [2, 5, 8, 11, 14, 17, 20]:
+                if digit in ['1', '2'] and group == data_list[-2]:
+                    self.string_result.append(UNITS.get(digit)[1])
+                    counter += 1
+                    continue
+                elif digit in ['1', '2']:
+                    self.string_result.append(UNITS.get(digit)[1])
+                    counter += 1
+                    continue
+                else:
+                    self.string_result.append(UNITS.get(digit))
+            counter += 1
+            return counter, self.string_result
+
+    def fourth_translation_method(self, counter, group, data_list):
+        for digit in group:
+            if digit == '0':
+                counter += 1
+                continue
+            if counter in [0, 3, 6, 9, 12, 15, 18, 21]:
+                self.string_result.append(HUNDREDS.get(digit))
+            elif counter in [2, 5, 8, 11, 14, 17, 20]:
+                if len(data_list) >= 2 and digit in ['1', '2'] and group == data_list[-2]:
+                    self.string_result.append(UNITS.get(digit)[1])
+                    counter += 1
+                    continue
+                elif digit in ['1', '2'] and group != data_list[-2]:
+                    self.string_result.append(UNITS.get(digit)[0])
+                    counter += 1
+                    continue
+                else:
+                    self.string_result.append(UNITS.get(digit))
+            counter += 1
+            return counter, self.string_result
+
+    def fifth_translation_method(self, counter, group):
+        for digit in group:
+            if counter in [0, 3, 6, 9, 12, 15, 18, 21]:
+                self.string_result.append(HUNDREDS.get(digit))
+            elif counter in [1, 4, 7, 10, 13, 16, 19]:
+                self.string_result.append(DOZENS.get(digit + group[-1]))
+            counter += 1
+        return counter, self.string_result
+
+    def sixth_translation_method(self, counter, group, data_list):
+        for digit in group:
+            if counter in [0, 3, 6, 9, 12, 15, 18, 21, 24]:
+                self.string_result.append(HUNDREDS.get(digit))
+            elif counter in [1, 4, 7, 10, 13, 16, 19, 22]:
+                self.string_result.append(DOZENS.get(digit))
+            elif counter in [2, 5, 8, 11, 14, 17, 20, 23]:
+                if digit == '0':
+                    counter += 1
+                    continue
+                elif len(data_list) >= 2 and digit in ['1', '2'] and group == data_list[-2]:
+                    self.string_result.append(UNITS.get(digit)[1])
+                    counter += 1
+                    continue
+                elif digit in ['1', '2']:
+                    self.string_result.append(UNITS.get(digit)[0])
+                    counter += 1
+                    continue
+                else:
+                    self.string_result.append(UNITS.get(digit))
+            counter += 1
+        return counter, self.string_result
+
+    # method for converting a data_list of numbers to a data_list of words.
+    def sub_number_representation(self, data_list):
         self.string_result = []
-        global iteration
 
         try:
             if len(str(self.number)) in [3, 6, 9, 12, 15, 18, 21, 24]:
-                iteration = 0
+                self.iteration = 0
             elif len(str(self.number)) in [1, 4, 7, 10, 13, 16, 19, 22]:
-                iteration = 2
+                self.iteration = 2
             elif len(str(self.number)) in [2, 5, 8, 11, 14, 17, 20, 23]:
-                iteration = 1
+                self.iteration = 1
         except NameError:
             print(ERROR_MSG)
-        # remember, list seems like:
+
+        # remember, data_list seems like:
         # >>> ['123','456','789']
         # in this case, '123' - first group, etc.
-        for group in list:
+        for group in data_list:
             # if first, second digits equal '0'.
             if len(group) >= 2 and group[0] == group[1] == '0':
-                for digit in group:
-                    if digit == '0':
-                        iteration += 1
-                        continue
-                    elif iteration in [2, 5, 8, 11, 14, 17, 20]:
-                        if digit in ['1', '2'] and group == list[-2]:
-                            self.string_result.append(UNITS.get(digit)[1])
-                            iteration += 1
-                            continue
-                        elif digit in ['1', '2']:
-                            self.string_result.append(UNITS.get(digit)[0])
-                            iteration += 1
-                            continue
-                        else:
-                            self.string_result.append(UNITS.get(digit))
-                    iteration += 1
+                self.iteration, self.string_result = self.first_translation_method(self.iteration, group, data_list)
 
             # if first digit equal '0' and 2,3 less than 19.
             elif group[0] == '0' and int(str(group[-2])+str(group[-1])) <= 19:
-                for digit in group:
-                    if digit == '0':
-                        iteration += 1
-                        continue
-                    if iteration in [1, 4, 7, 10, 13, 16, 19]:
-                        self.string_result.append(DOZENS.get(digit+group[-1]))
-                    iteration += 1
+                self.iteration, self.string_result = self.second_translation_method(self.iteration, group)
 
             # if digit '0' is first in the group.
             elif len(group) >= 2 and group[0] == '0':
-                for digit in group:
-                    if digit == '0':
-                        iteration += 1
-                        continue
-                    if iteration in [1, 4, 7, 10, 13, 16, 19]:
-                        self.string_result.append(DOZENS.get(digit))
-                    elif iteration in [2, 5, 8, 11, 14, 17, 20]:
-                        if digit in ['1', '2'] and group == list[-2]:
-                            self.string_result.append(UNITS.get(digit)[1])
-                            iteration += 1
-                            continue
-                        elif digit in ['1', '2']:
-                            self.string_result.append(UNITS.get(digit)[1])
-                            iteration += 1
-                            continue
-                        else:
-                            self.string_result.append(UNITS.get(digit))
-                    iteration += 1
+                self.iteration, self.string_result = self.third_translation_method(self.iteration, group, data_list)
 
             # if digit '0' in the middle of group.
             elif len(group) >= 2 and group[-2] == '0':
-                for digit in group:
-                    if digit == '0':
-                        iteration += 1
-                        continue
-                    if iteration in [0, 3, 6, 9, 12, 15, 18, 21]:
-                        self.string_result.append(HUNDREDS.get(digit))
-                    elif iteration in [2, 5, 8, 11, 14, 17, 20]:
-                        if digit in ['1', '2'] and group == list[-2]:
-                            self.string_result.append(UNITS.get(digit)[1])
-                            iteration += 1
-                            continue
-                        elif digit in ['1', '2']:
-                            self.string_result.append(UNITS.get(digit)[1])
-                            iteration += 1
-                            continue
-                        else:
-                            self.string_result.append(UNITS.get(digit))
-                    iteration += 1
+                self.iteration, self.string_result = self.fourth_translation_method(self.iteration, group, data_list)
 
             # if last two numbers in group less than 19.
             elif len(group) >= 2 and int(str(group[-2])+str(group[-1])) <= 19:
-                for digit in group:
-                    if iteration in [0, 3, 6, 9, 12, 15, 18, 21]:
-                        self.string_result.append(HUNDREDS.get(digit))
-                    elif iteration in [1, 4, 7, 10, 13, 16, 19]:
-                        self.string_result.append(DOZENS.get(digit+group[-1]))
-                    iteration += 1
+                self.iteration, self.string_result = self.fifth_translation_method(self.iteration, group)
             else:
                 # all another cases.
-                for digit in group:
-                    if iteration in [0, 3, 6, 9, 12, 15, 18, 21, 24]:
-                        self.string_result.append(HUNDREDS.get(digit))
-                    elif iteration in [1, 4, 7, 10, 13, 16, 19, 22]:
-                        self.string_result.append(DOZENS.get(digit))
-                    elif iteration in [2, 5, 8, 11, 14, 17, 20, 23]:
-                        if digit == '0':
-                            iteration += 1
-                            continue
-                        elif len(list) >= 2 and digit in ['1', '2'] and group == list[-2]:
-                            self.string_result.append(UNITS.get(digit)[1])
-                            iteration += 1
-                            continue
-                        elif digit in ['1', '2']:
-                            self.string_result.append(UNITS.get(digit)[0])
-                            iteration += 1
-                            continue
-                        else:
-                            self.string_result.append(UNITS.get(digit))
-                    iteration += 1
+                self.iteration, self.string_result = self.sixth_translation_method(self.iteration, group, data_list)
 
             # in this block we add the right ranks for number.
             if self.suitable_ranks:
                 if group == '000':
                     self.suitable_ranks.pop()
                     continue
-                if group[-1] in ['2', '3', '4']:
+                if len(group) > 1 and group[-2] + group[-1] in ['11', '12', '13', '14']:
+                    ending = 2
+                elif len(data_list) >= 2 and group[-1] in ['2', '3', '4']:
                     ending = 1
                 elif group[-1] == '1':
                     ending = 0
@@ -211,14 +238,15 @@ class NumbersRepresentation:
 
                 self.string_result.append(self.suitable_ranks[-1][ending])
                 self.suitable_ranks.pop()
+                self.iteration = 0
         return self.string_result
 
 
-def main():
-    ordered_list = numb.list_packing()
-    numb.get_rank_counts(ordered_list)
+def main(class_instance):
+    ordered_list = class_instance.list_packing()
+    class_instance.get_rank_counts(ordered_list)
 
-    print(' '.join(numb.sub_number_representation(ordered_list)).capitalize())
+    print(' '.join(class_instance.sub_number_representation(ordered_list)).capitalize())
 
 
 if __name__ == '__main__':
@@ -230,7 +258,7 @@ if __name__ == '__main__':
             print(VALUE_ERROR_MSG)
             continue
 
-        main()
+        main(numb)
 
         iteration = input('Start the program one more time?[y/n]: ')
         if iteration.lower() not in ['y', 'yes']:
