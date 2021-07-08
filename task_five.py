@@ -65,6 +65,8 @@ class NumbersRepresentation:
     This class made to convert numbers to their word's representations.
     """
     def __init__(self, number: int):
+        self.suitable_ranks = []
+        self.string_result = []
         self.number = number
         self.iteration = 0
 
@@ -183,8 +185,6 @@ class NumbersRepresentation:
 
     # method for converting a data_list of numbers to a data_list of words.
     def sub_number_representation(self, data_list):
-        self.string_result = []
-
         try:
             if len(str(self.number)) in [3, 6, 9, 12, 15, 18, 21, 24]:
                 self.iteration = 0
