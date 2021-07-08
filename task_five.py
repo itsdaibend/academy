@@ -126,7 +126,7 @@ class NumbersRepresentation:
                 else:
                     self.string_result.append(UNITS.get(digit))
             counter += 1
-            return counter, self.string_result
+        return counter, self.string_result
 
     def fourth_translation_method(self, counter, group, data_list):
         for digit in group:
@@ -147,7 +147,7 @@ class NumbersRepresentation:
                 else:
                     self.string_result.append(UNITS.get(digit))
             counter += 1
-            return counter, self.string_result
+        return counter, self.string_result
 
     def fifth_translation_method(self, counter, group):
         for digit in group:
@@ -246,7 +246,7 @@ def main(class_instance):
     ordered_list = class_instance.list_packing()
     class_instance.get_rank_counts(ordered_list)
 
-    print(' '.join(class_instance.sub_number_representation(ordered_list)).capitalize())
+    return ' '.join(class_instance.sub_number_representation(ordered_list)).capitalize()
 
 
 if __name__ == '__main__':
@@ -258,7 +258,7 @@ if __name__ == '__main__':
             print(VALUE_ERROR_MSG)
             continue
 
-        main(numb)
+        print(main(numb))
 
         iteration = input('Start the program one more time?[y/n]: ')
         if iteration.lower() not in ['y', 'yes']:
